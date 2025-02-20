@@ -1,19 +1,8 @@
-
-
 <script lang="ts">
-import { onDestroy } from 'svelte';
-import { createStore } from './stores.js';
-import { get } from 'svelte/store';
+  import { onDestroy } from 'svelte';
 
 
-
-	export let myStore;
-
-	const currentValue = $myStore;
-
-	function changeValue(newValue) {
-    	$myStore = newValue;
-  	}
+  export let myStore;
 
   const MyState ={
 		NEW: 0,
@@ -76,6 +65,10 @@ import { get } from 'svelte/store';
 	  return secondsSinceEpoch;
   }
 
+  function changeValue(newValue) {
+    	$myStore = newValue;
+  	}
+
 
   function complete() {
 	  //elapsed = 0
@@ -95,15 +88,6 @@ import { get } from 'svelte/store';
 	  startTimeEpoch = (Math.floor((Date.now()) / (1000 * 60)) * 60);
 	  console.log("Runing!");
   }
-
-  /*
-  $effect(() => {
-	  if (!duration) return
-	  start()
-	  return () => clearInterval(interval)
-  })
-
-   */
 
   let cleanupEffect;
 

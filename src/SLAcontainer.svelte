@@ -1,6 +1,5 @@
 <script>
 	import SLAbar from "./lib/SLAbar.svelte";
-	import {createStore} from "./lib/stores.js";
 	import { createPersistentStore } from './lib/persistentStore.js';
 
 
