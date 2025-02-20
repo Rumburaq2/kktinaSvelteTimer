@@ -2,6 +2,19 @@
 
 <script lang="ts">
 import { onDestroy } from 'svelte';
+import { createStore } from './stores.js';
+import { get } from 'svelte/store';
+
+
+
+	export let myStore;
+
+	const currentValue = $myStore;
+
+	function changeValue(newValue) {
+    	$myStore = newValue;
+  	}
+
   const MyState ={
 		NEW: 0,
 	  	RUNNING: 1,
@@ -67,6 +80,7 @@ import { onDestroy } from 'svelte';
   function complete() {
 	  //elapsed = 0
 	  clearInterval(interval)
+	  changeValue(10);
 	  //turn the shit green
   }
 
@@ -172,3 +186,5 @@ import { onDestroy } from 'svelte';
 	<button on:click={resume}>Resume</button>
 	<button on:click={complete}>Complete</button>
 </div>
+
+<p>Local store: {$myStore}</p>

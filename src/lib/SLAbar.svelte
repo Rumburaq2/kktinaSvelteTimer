@@ -1,6 +1,15 @@
 <script lang="ts">
     import ProgressBar from "./ProgressBar.svelte";
 
+    const container = document.querySelector('.SLAcontainer');
+	console.log(container);
+
+
+    export let myStore;
+
+    const currentValue = $myStore;
+
+
 	//setting up startDateTime value
 	let startDateTime = "01/02/2025 14:30";//defalut value
     //calculate timestamp DD/MM/YYYY HH:MM of current time
@@ -194,10 +203,10 @@
   <p>Input Date and Time: {startDateTime}</p>
   {#if result === true} <!-- if within working hours -->
     <p>The provided time is within working hours.</p>
-	  <ProgressBar startDateTime={startDateTime} {endDateTime}/>
+	  <ProgressBar startDateTime={startDateTime} {endDateTime} {myStore}/>
   {:else} <!-- if not within working hours - recompute endDateTime-->
     <p>The closest working time is: {result}</p>
-	  <ProgressBar startDateTime={result} endDateTime={computedValue}/>
+	  <ProgressBar startDateTime={result} endDateTime={computedValue} {myStore}/>
   {/if}
 </main>
 
