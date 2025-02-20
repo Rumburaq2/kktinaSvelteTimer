@@ -74,6 +74,7 @@
 	  //elapsed = 0
 	  clearInterval(interval)
 	  changeValue(10);
+	  currstate = MyState.PAUSED;
 	  //turn the shit green
   }
 
@@ -153,11 +154,11 @@
 </script>
 
 <div class="grid-gap">
-	<div>
+	<div class="progress-container">
       <p>{startDateTime} - {endDateTime}</p>
 		<label>
 			<span>Elapsed time:</span>
-			<progress max={duration} value={elapsed}></progress>
+			<progress class:completed={currstate === MyState.PAUSED} max={duration} value={elapsed}></progress>
 		</label>
 
 		<div>{elapsed.toFixed(1)}s</div>
@@ -172,3 +173,40 @@
 </div>
 
 <p>Local store: {$myStore}</p>
+
+<style>
+	.progress-container {
+    width: 100%;
+    padding: 5px;
+    border: 2px solid grey;
+    border-radius: 10px;
+    background-color: #f3f3f3;
+  }
+
+  progress {
+    width: 90%;
+    height: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  progress::-webkit-progress-bar {
+    background-color: #ffffff;
+    border-radius: 10px;
+  }
+
+  progress::-webkit-progress-value {
+    background-color: lightblue;
+    border-radius: 10px;
+  }
+
+  /* When complete, change the progress bar's value color */
+  .completed::-webkit-progress-value {
+    background-color: green;
+  }
+
+  progress::-moz-progress-bar {
+    background-color: lightblue;
+    border-radius: 10px;
+  }
+</style>

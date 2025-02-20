@@ -26,6 +26,29 @@
 
 	const myStore = createPersistentStore(storeName, -1);
 
+
+	function testLocalStorageSpace() {
+		/*
+  try {
+
+    for (let i = 0; i < 100000; i++) {
+      // Use a unique key for each iteration (e.g., include the index `i`)
+      const testKey = `testKey_${i}_${Date.now()}`; // Unique key
+      const data = String(Math.floor(Math.random() * (45000 - 60 + 1)) + 60);
+      localStorage.setItem(testKey, data);
+    }
+    console.log("Successfully added 5 entries to localStorage!");
+  } catch (e) {
+    const used = Math.round(JSON.stringify(localStorage).length / 1024 / 1024);
+    console.log(`LocalStorage is full! ~${used}MB used.`);
+  }
+
+	   */
+	  localStorage.clear()
+}
+
+testLocalStorageSpace();
+
 </script>
 
 <div class="grid-gap">
