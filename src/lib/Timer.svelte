@@ -1,111 +1,112 @@
 <script>
-    import {onMount, onDestroy} from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
 
-    // Input timestamps in DD/MM/YYYY HH:MM format
-    export let startTime = "25/12/2025 15:30";
-    export let endTime = "31/12/2025 23:59";
+  // Input timestamps in DD/MM/YYYY HH:MM format
+  export let startTime = "25/12/2025 15:30";
+  export let endTime = "31/12/2025 23:59";
 
-    let currentTime = new Date();
-    let timeRemaining = 0;
-    let totalDuration = 0;
-    let progress = 0;
-    let isExpired = false;
-    let hasStarted = false;
-    let interval;
+  let currentTime = new Date();
+  let timeRemaining = 0;
+  let totalDuration = 0;
+  let progress = 0;
+  let isExpired = false;
+  let hasStarted = false;
+  let interval;
 
-    // Parse DD/MM/YYYY HH:MM format
-    function parseTimestamp(timestamp) {
-        const [datePart, timePart] = timestamp.split(' ');
-        const [day, month, year] = datePart.split('/');
-        const [hours, minutes] = timePart.split(':');
+  // Parse DD/MM/YYYY HH:MM format as UTC
+  function parseTimestamp(timestamp) {
+      const [datePart, timePart] = timestamp.split(' ');
+      const [day, month, year] = datePart.split('/');
+      const [hours, minutes] = timePart.split(':');
 
-        return new Date(year, month - 1, day, hours, minutes);
-    }
+      // Create UTC date
+      return new Date(Date.UTC(year, month - 1, day, hours, minutes));
+  }
 
-    // Format time remaining as HH:MM:SS
-    function formatTime(milliseconds) {
-        if (milliseconds <= 0) return "00:00:00";
+  // Format time remaining as HH:MM:SS
+  function formatTime(milliseconds) {
+      if (milliseconds <= 0) return "00:00:00";
 
-        const totalSeconds = Math.floor(milliseconds / 1000);
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
+      const totalSeconds = Math.floor(milliseconds / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
 
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
 
-    // Format current time as DD/MM/YYYY HH:MM:SS
-    function formatCurrentTime(date) {
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
-        const hours = date.getHours().toString().padStart(2, '0');
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        const seconds = date.getSeconds().toString().padStart(2, '0');
+  // Format current time as DD/MM/YYYY HH:MM:SS UTC
+  function formatCurrentTime(date) {
+      const day = date.getUTCDate().toString().padStart(2, '0');
+      const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+      const year = date.getUTCFullYear();
+      const hours = date.getUTCHours().toString().padStart(2, '0');
+      const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+      const seconds = date.getUTCSeconds().toString().padStart(2, '0');
 
-        return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-    }
+      return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} UTC`;
+  }
 
-    function updateTimer() {
-        currentTime = new Date();
-        const start = parseTimestamp(startTime);
-        const end = parseTimestamp(endTime);
+  function updateTimer() {
+      currentTime = new Date();
+      const start = parseTimestamp(startTime);
+      const end = parseTimestamp(endTime);
 
-        // Check if we're before start time
-        if (currentTime.getTime() < start.getTime()) {
-            timeRemaining = start.getTime() - currentTime.getTime();
-            hasStarted = false;
-            isExpired = false;
-            progress = 0;
-        }
-        // Check if we're between start and end time
-        else if (currentTime.getTime() <= end.getTime()) {
-            timeRemaining = end.getTime() - currentTime.getTime();
-            hasStarted = true;
-            isExpired = false;
+      // Check if we're before start time
+      if (currentTime.getTime() < start.getTime()) {
+          timeRemaining = start.getTime() - currentTime.getTime();
+          hasStarted = false;
+          isExpired = false;
+          progress = 0;
+      }
+      // Check if we're between start and end time
+      else if (currentTime.getTime() <= end.getTime()) {
+          timeRemaining = end.getTime() - currentTime.getTime();
+          hasStarted = true;
+          isExpired = false;
 
-            // Calculate progress from start time to end time
-            const elapsed = currentTime.getTime() - start.getTime();
-            progress = Math.max(0, Math.min(100, (elapsed / totalDuration) * 100));
-        }
-        // We're past end time
-        else {
-            timeRemaining = 0;
-            hasStarted = true;
-            isExpired = true;
-            progress = 100;
+          // Calculate progress from start time to end time
+          const elapsed = currentTime.getTime() - start.getTime();
+          progress = Math.max(0, Math.min(100, (elapsed / totalDuration) * 100));
+      }
+      // We're past end time
+      else {
+          timeRemaining = 0;
+          hasStarted = true;
+          isExpired = true;
+          progress = 100;
 
-            if (interval) {
-                clearInterval(interval);
-            }
-        }
-    }
+          if (interval) {
+              clearInterval(interval);
+          }
+      }
+  }
 
-    function startTimer() {
-        const start = parseTimestamp(startTime);
-        const end = parseTimestamp(endTime);
+  function startTimer() {
+      const start = parseTimestamp(startTime);
+      const end = parseTimestamp(endTime);
 
-        // Set total duration from start to end time
-        totalDuration = end.getTime() - start.getTime();
+      // Set total duration from start to end time
+      totalDuration = end.getTime() - start.getTime();
 
-        if (totalDuration <= 0) {
-            console.warn("End time must be after start time");
-            totalDuration = 1; // Prevent division by zero
-        }
+      if (totalDuration <= 0) {
+          console.warn("End time must be after start time");
+          totalDuration = 1; // Prevent division by zero
+      }
 
-        updateTimer();
-        interval = setInterval(updateTimer, 1000);
-    }
+      updateTimer();
+      interval = setInterval(updateTimer, 1000);
+  }
 
-    onMount(() => {
-        startTimer();
-    });
+  onMount(() => {
+      startTimer();
+  });
 
-    onDestroy(() => {
-        if (interval) {
-            clearInterval(interval);
-        }
-    });
+  onDestroy(() => {
+      if (interval) {
+          clearInterval(interval);
+      }
+  });
 </script>
 
 <div class="timer-container">

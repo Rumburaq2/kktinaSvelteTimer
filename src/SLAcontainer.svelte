@@ -7,7 +7,7 @@
 
 <div class="grid-gap">
 		<div style:display={isVisible ? 'block' : 'none'}>
-			<Timer startTime="12/6/2025 15:00" endTime="13/6/2025 00:10"/>
+			<Timer startTime="12/6/2025 14:00" endTime="12/6/2025 14:30"/>
 		</div>
 
 	<div class="container">
