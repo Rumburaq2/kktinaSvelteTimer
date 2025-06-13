@@ -9,7 +9,7 @@
         "workingDays": ["monday", "tuesday", "wednesday", "thursday", "friday"],
         "workingHours": {
             "is24x7": false,
-            "startTime": "08:00",
+            "startTime": "06:00",
             "endTime": "20:00"
         },
         "excludedDates": [
@@ -65,27 +65,6 @@
         }
     }
 
-    function useCurrentTime() {
-        inputTime = getCurrentUTCTime();
-    }
-
-    // Test scenarios
-    function testScenario(scenario) {
-        switch(scenario) {
-            case 'weekday-morning':
-                inputTime = '17/06/2025 09:00'; // Tuesday morning
-                break;
-            case 'weekend':
-                inputTime = '14/06/2025 10:00'; // Saturday
-                break;
-            case 'after-hours':
-                inputTime = '16/06/2025 22:00'; // Monday evening
-                break;
-            case 'holiday':
-                inputTime = '25/12/2025 10:00'; // Christmas Day
-                break;
-        }
-    }
 </script>
 
 <main>
@@ -100,24 +79,9 @@
                 bind:value={inputTime}
                 placeholder="13/06/2025 14:30"
             />
-            <button on:click={useCurrentTime}>Use Current Time</button>
         </div>
 
-        <div class="input-group">
-            <label for="sla-select">Select SLA Configuration:</label>
-            <select id="sla-select" bind:value={selectedSLA}>
-                <option value={company1SLA}>Company 1 (Mon-Fri, 8:00-20:00)</option>
-                <option value={company3SLA}>Company 3 (24/7)</option>
-            </select>
-        </div>
 
-        <div class="test-scenarios">
-            <h3>Test Scenarios:</h3>
-            <button on:click={() => testScenario('weekday-morning')}>Weekday Morning</button>
-            <button on:click={() => testScenario('weekend')}>Weekend</button>
-            <button on:click={() => testScenario('after-hours')}>After Hours</button>
-            <button on:click={() => testScenario('holiday')}>Holiday</button>
-        </div>
     </div>
 
     <div class="result">
