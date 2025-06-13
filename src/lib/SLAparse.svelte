@@ -1,5 +1,6 @@
 <script>
     import { checkSLAWorkingTime } from './sla-time-checker.js';
+    import Timer from "./Timer.svelte";
 
     // Example SLA configurations
     const company1SLA = {
@@ -89,6 +90,7 @@
         {#if result === true}
             <div class="status working">
                 ✅ Time is within working hours
+                <Timer startTime={inputTime} endTime="12/6/2025 14:30"/>
             </div>
         {:else if typeof result === 'string' && !result.startsWith('Error')}
             <div class="status not-working">
