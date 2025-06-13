@@ -363,7 +363,7 @@
                 <div class="timer-info">
                     <p><strong>SLA will start at:</strong> {result}</p>
                     <p><strong>Calculated End Time ({selectedSeverity} severity):</strong> {calculateEndTime(result, selectedSeverity, selectedSLA)}</p>
-                    <Timer startTime={result} endTime={calculatedEndTime}/>
+                    <Timer startTime={result} endTime={calculateEndTime(result, selectedSeverity, selectedSLA)}/>
                 </div>
             </div>
         {:else if result}

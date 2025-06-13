@@ -56,6 +56,7 @@
 
   function updateTimer() {
       currentTime = new Date();
+      //currentTime = new Date(Date.UTC(2025, 6 - 1, 13, 18, 50));
       const start = parseTimestamp(startTime);
       const end = parseTimestamp(endTime);
 
